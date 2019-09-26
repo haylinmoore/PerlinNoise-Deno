@@ -21,7 +21,7 @@ export class PerlinNoise {
         }
     }
 
-    public noise = function (x: number, y: number, z: number): number {
+    public noise = function (x: number, y: number, z: number, min: number = 0, max: number = 1): number {
 
         var p = new Array(512)
         for (let i = 0; i < 256; i++)
@@ -43,7 +43,8 @@ export class PerlinNoise {
             BA = p[B] + Z,
             BB = p[B + 1] + Z; // THE 8 CUBE CORNERS,
 
-        return this.scale(this.lerp(w, this.lerp(v, this.lerp(u, this.grad(p[AA], x, y, z), // AND ADD
+        // The perlin noise value 0 -> 1
+        let val = this.scale(this.lerp(w, this.lerp(v, this.lerp(u, this.grad(p[AA], x, y, z), // AND ADD
                     this.grad(p[BA], x - 1, y, z)), // BLENDED
                 this.lerp(u, this.grad(p[AB], x, y - 1, z), // RESULTS
                     this.grad(p[BB], x - 1, y - 1, z))), // FROM  8
@@ -51,6 +52,8 @@ export class PerlinNoise {
                     this.grad(p[BA + 1], x - 1, y, z - 1)), // OF CUBE
                 this.lerp(u, this.grad(p[AB + 1], x, y - 1, z - 1),
                     this.grad(p[BB + 1], x - 1, y - 1, z - 1)))));
+
+        return min + val*(max - min);
     }
     private fade = function (t: number): number {
         return t * t * t * (t * (t * 6 - 15) + 10);
