@@ -16,10 +16,15 @@ The class that handles PerlinNoise generation.
 `perlin.noise(x: number, y: number, z: number, min?: number, max?: number)`
 
 `x` (number) X cordinate
+
 `y` (number) X cordinate 
+
 `z` (number) X cordinate 
+
 `min` (number) not required, default 0. Minium value generated.
+
 `max` (number) not required, default 1. Maxium value generated
+
 
 Will return a perlin noise random value between min and max
 
