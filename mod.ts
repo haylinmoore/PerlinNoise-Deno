@@ -21,7 +21,7 @@ export class PerlinNoise {
         }
     }
 
-    public noise = function (x: number, y: number, z: number, min: number = 0, max: number = 1): number {
+    public noise = function (x: number, y: number, z: number, min: number = 0, max: number = 2): number {
 
         var p = new Array(512)
         for (let i = 0; i < 256; i++)
