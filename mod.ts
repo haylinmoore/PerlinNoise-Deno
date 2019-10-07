@@ -1,6 +1,6 @@
 export class PerlinNoise {
 
-    private permutation: number[] = [151, 160, 137, 91, 90, 15,
+    private permutation: Array<number> = [151, 160, 137, 91, 90, 15,
         131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23,
         190, 6, 148, 247, 120, 234, 75, 0, 26, 197, 62, 94, 252, 219, 203, 117, 35, 11, 32, 57, 177, 33,
         88, 237, 149, 56, 87, 174, 20, 125, 136, 171, 168, 68, 175, 74, 165, 71, 134, 139, 48, 27, 166,
@@ -15,18 +15,25 @@ export class PerlinNoise {
         138, 236, 205, 93, 222, 114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66, 215, 61, 156, 180
     ];
 
-    constructor(permutation ? : number[]) {
+    constructor(permutation?: Array<number>) {
         if (permutation) {
             this.permutation = permutation;
         }
     }
+    /**
+     * @param x First Number
+     * @param y Second Number
+     * @param z Third Number
+     * @param min Minimum Value
+     * @param max Maximum Value
+     * @returns Return a Perline Noise-d Number
+     */
+    public noise = (x: number, y: number, z: number, min: number = 0, max: number = 1): number => {
 
-    public noise = function (x: number, y: number, z: number, min: number = 0, max: number = 1): number {
-
-        var p = new Array(512)
-        for (let i = 0; i < 256; i++)
+        let p = new Array(512)
+        for (let i = 0; i < 256; i++) {
             p[256 + i] = p[i] = this.permutation[i];
-
+        }
         const X = Math.floor(x) & 255, // FIND UNIT CUBE THAT
             Y = Math.floor(y) & 255, // CONTAINS POINT.
             Z = Math.floor(z) & 255;
@@ -44,7 +51,7 @@ export class PerlinNoise {
             BB = p[B + 1] + Z; // THE 8 CUBE CORNERS,
 
         // The perlin noise value 0 -> 1
-        let val = this.scale(this.lerp(w, this.lerp(v, this.lerp(u, this.grad(p[AA], x, y, z), // AND ADD
+        const val = this.scale(this.lerp(w, this.lerp(v, this.lerp(u, this.grad(p[AA], x, y, z), // AND ADD
                     this.grad(p[BA], x - 1, y, z)), // BLENDED
                 this.lerp(u, this.grad(p[AB], x, y - 1, z), // RESULTS
                     this.grad(p[BB], x - 1, y - 1, z))), // FROM  8
@@ -55,20 +62,20 @@ export class PerlinNoise {
 
         return min + val*(max - min);
     }
-    private fade = function (t: number): number {
+    private fade = (t: number): number => {
         return t * t * t * (t * (t * 6 - 15) + 10);
     }
-    private lerp = function (t: number, a: number, b: number): number {
+    private lerp = (t: number, a: number, b: number): number => {
         return a + t * (b - a);
     }
-    private grad = function (hash: number, x: number, y: number, z: number): number {
-        var h = hash & 15; // CONVERT LO 4 BITS OF HASH CODE
-        var u = h < 8 ? x : y, // INTO 12 this.gradIENT DIRECTIONS.
+    private grad = (hash: number, x: number, y: number, z: number): number => {
+        let h = hash & 15; // CONVERT LO 4 BITS OF HASH CODE
+        let u = h < 8 ? x : y, // INTO 12 this.gradIENT DIRECTIONS.
             v = h < 4 ? y : h == 12 || h == 14 ? x : z;
         return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
     }
     private scale = function (n: number): number {
         return (1 + n) / 2;
-    }
+    };
 
 }
